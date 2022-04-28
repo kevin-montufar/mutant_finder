@@ -53,38 +53,38 @@ class MutantDetectorUseCaseTest {
     @Mock
     PersonRepository personRepository;
 
-    MutantFinderUseCase mutantDetectorUseCase;
+    MutantFinderUseCase mutantFinderUseCase;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        mutantDetectorUseCase = new MutantFinderUseCase(personRepository);
+        mutantFinderUseCase = new MutantFinderUseCase(personRepository);
     }
 
     @Test
     void isNotMutant() {
-        assertFalse(mutantDetectorUseCase.isMutant(humanDnaChain));
+        assertFalse(mutantFinderUseCase.isMutant(humanDnaChain));
     }
 
     @Test
     void isMutantByHorizontalValidation() {
-        assertTrue(mutantDetectorUseCase.isMutant(horizontalValidMutantDnaChain));
+        assertTrue(mutantFinderUseCase.isMutant(horizontalValidMutantDnaChain));
     }
 
     @Test
     void isMutantByVerticalValidation() {
-        assertTrue(mutantDetectorUseCase.isMutant(verticalValidMutantDnaChain));
+        assertTrue(mutantFinderUseCase.isMutant(verticalValidMutantDnaChain));
     }
 
     @Test
     void isMutantByDiagonalValidation() {
-        assertTrue(mutantDetectorUseCase.isMutant(diagonalValidMutantDnaChain));
+        assertTrue(mutantFinderUseCase.isMutant(diagonalValidMutantDnaChain));
     }
 
     @Test
     void getStatsTest() {
         Mockito.when(personRepository.countPeopleByIsMutant(true)).thenReturn(Long.valueOf(4));
         Mockito.when(personRepository.countPeopleByIsMutant(false)).thenReturn(Long.valueOf(2));
-        assertEquals(2, mutantDetectorUseCase.getStats().getRatio());
+        assertEquals(2, mutantFinderUseCase.getStats().getRatio());
     }
 }

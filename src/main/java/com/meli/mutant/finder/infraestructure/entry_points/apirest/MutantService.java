@@ -16,18 +16,18 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MutantService {
 
-    private final MutantFinderUseCase mutantDetectorUseCase;
+    private final MutantFinderUseCase mutantFinderUseCase;
 
     @GetMapping("/stats")
     public ResponseEntity<Stat> getStats() {
-        return new ResponseEntity<>(mutantDetectorUseCase.getStats(), new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(mutantFinderUseCase.getStats(), new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping("/mutant")
     public ResponseEntity<String> isMutant(@RequestBody Person person) {
         return new ResponseEntity<>(
                 new HttpHeaders(),
-                mutantDetectorUseCase.isMutant(person.getDna()) ? HttpStatus.OK : HttpStatus.FORBIDDEN
+                mutantFinderUseCase.isMutant(person.getDna()) ? HttpStatus.OK : HttpStatus.FORBIDDEN
         );
     }
 }

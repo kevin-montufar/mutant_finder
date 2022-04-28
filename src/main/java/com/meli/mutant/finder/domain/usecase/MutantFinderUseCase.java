@@ -2,6 +2,7 @@ package com.meli.mutant.finder.domain.usecase;
 
 import com.meli.mutant.finder.domain.model.person.Person;
 import com.meli.mutant.finder.domain.model.person.PersonRepository;
+import com.meli.mutant.finder.domain.model.util.exception.MutantFinderException;
 import com.meli.mutant.finder.domain.usecase.model.Stat;
 import com.meli.mutant.finder.domain.usecase.util.MutantDetectionUtilities;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public class MutantFinderUseCase {
     public boolean isMutant(List<String> dnaChain) {
         int mutantDnaFound = 0;
         if (!MutantDetectionUtilities.isDnaChainValid(dnaChain)) {
-            // Throw exception
+            throw new MutantFinderException("400", "Dna chain is not valid.");
         }
         mutantDnaFound += MutantDetectionUtilities.horizontalVerification(dnaChain);
         if (mutantDnaFound > 1) {

@@ -1,7 +1,9 @@
 package com.meli.mutant.finder.domain.usecase;
 
 import com.meli.mutant.finder.domain.model.person.PersonRepository;
+import com.meli.mutant.finder.domain.model.util.exception.MutantFinderException;
 import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -13,13 +15,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MutantDetectorUseCaseTest {
-    private final List<String> testDnaChain = Arrays.asList(
+    private final List<String> invalidDnaChain = Arrays.asList(
             "AAAACG",
-            "AAACGT",
-            "AAAATA",
-            "ACGTAA",
-            "CGTAAA",
-            "GTAAAA"
+            "AAACGT"
     );
 
     private final List<String> horizontalValidMutantDnaChain = Arrays.asList(
@@ -59,6 +57,11 @@ class MutantDetectorUseCaseTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         mutantFinderUseCase = new MutantFinderUseCase(personRepository);
+    }
+
+    @Test
+    void invalidDnaChain() {
+        assertThrows(MutantFinderException.class, () -> mutantFinderUseCase.isMutant(invalidDnaChain));
     }
 
     @Test

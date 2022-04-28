@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Builder(toBuilder = true)
 public class Person {
-    private Long id;
-    private List<String> dnaChain;
-    private boolean isMutant;
+    private List<String> dna;
+    private boolean mutant;
 }

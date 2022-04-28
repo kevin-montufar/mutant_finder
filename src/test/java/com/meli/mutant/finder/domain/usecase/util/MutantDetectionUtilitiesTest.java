@@ -16,13 +16,14 @@ class MutantDetectionUtilitiesTest {
             "ACGT",
             "ACGT"
     );
-    List<String> miniDiagonalValidMutantDnaChain = Arrays.asList(
-            "CAAC",
-            "ACCA",
-            "ACCA",
-            "CAAC"
+    private final List<String> miniDiagonalValidMutantDnaChain = Arrays.asList(
+            "CAAT",
+            "ACTA",
+            "ATCA",
+            "TAAC"
     );
-    List<String> diagonalValidMutantDnaChain = Arrays.asList(
+
+    private final List<String> diagonalValidMutantDnaChain = Arrays.asList(
             "CAGTAG",
             "TCAGGG",
             "ATCGGT",
@@ -31,19 +32,24 @@ class MutantDetectionUtilitiesTest {
             "GCGTCG"
     );
 
-    List<String> diagonalValidMutantDnaChain2 = Arrays.asList(
-            "AAAACG",
-            "AAACGT",
-            "AAAATA",
-            "ACGTAA",
-            "CGTAAA",
-            "GTAAAA"
+    private final List<String> diagonalValidMutantDnaChain2 = Arrays.asList(
+            "ACGTA",
+            "CGTAC",
+            "GTAAC",
+            "TACCG",
+            "ACGTA"
     );
     private final List<String> rectangularDnaChain = Arrays.asList(
             "CCCC",
             "CCCC",
             "CCCC",
             "CCC"
+    );
+
+    private final List<String> lessThanFourDnaChain = Arrays.asList(
+            "CCCC",
+            "CCCC",
+            "CCCC"
     );
 
     private final List<String> invalidCharactersDnaChain = Arrays.asList(
@@ -53,6 +59,13 @@ class MutantDetectionUtilitiesTest {
             "CCCC"
     );
 
+
+    private final List<String> verticalValidMutantDnaChain = Arrays.asList(
+            "GAGT",
+            "GAAG",
+            "GAGT",
+            "GAGT"
+    );
 
     @Test
     void isDnaChainValid() {
@@ -75,6 +88,11 @@ class MutantDetectionUtilitiesTest {
     }
 
     @Test
+    void isNotDnaChainValidWhenIsLessThanFourElements() {
+        assertFalse(MutantDetectionUtilities.isDnaChainValid(lessThanFourDnaChain));
+    }
+
+    @Test
     void isNotDnaChainValidWhenContainsInvalidCharacters() {
         assertFalse(MutantDetectionUtilities.isDnaChainValid(invalidCharactersDnaChain));
     }
@@ -86,26 +104,26 @@ class MutantDetectionUtilitiesTest {
 
     @Test
     void verticalVerification() {
-        assertNotNull(MutantDetectionUtilities.transposeDnaChain(validMutantDnaChain));
+        assertEquals(Long.valueOf(2), MutantDetectionUtilities.verticalVerification(verticalValidMutantDnaChain, 0));
     }
 
     @Test
     void diagonalVerification() {
-        assertEquals(2, MutantDetectionUtilities.checkPrincipalDiagonals(miniDiagonalValidMutantDnaChain, 0));
+        assertEquals(2, MutantDetectionUtilities.diagonalVerification(miniDiagonalValidMutantDnaChain, 0));
     }
 
     @Test
     void leftToRightDiagonalsVerificationTest() {
-        assertEquals(4, MutantDetectionUtilities.checkLeftToRightDiagonals(diagonalValidMutantDnaChain, 0));
+        assertEquals(2, MutantDetectionUtilities.diagonalVerification(diagonalValidMutantDnaChain, 0));
     }
 
     @Test
     void rightToLeftDiagonalsVerificationTest() {
-        assertEquals(4, MutantDetectionUtilities.checkRightToLeftDiagonals(diagonalValidMutantDnaChain2, 0));
+        assertEquals(3, MutantDetectionUtilities.diagonalVerification(diagonalValidMutantDnaChain2, 0));
     }
 
     @Test
     void isDnaChainDimensionsValid() {
-        assertTrue(MutantDetectionUtilities.isDnaChainSquare(validMutantDnaChain));
+        assertTrue(MutantDetectionUtilities.isDnaChainValid(validMutantDnaChain));
     }
 }

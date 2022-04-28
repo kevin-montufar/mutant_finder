@@ -17,7 +17,13 @@ public class PersonDataRepositoryAdapter extends AdapterOperations<Person, Perso
 
     @Override
     public Person save(Person person) {
-
-        return person;
+        return super.save(person);
     }
+
+    @Override
+    public Long countPeopleByIsMutant(boolean isMutant) {
+        return repository.countPersonDataByIsMutantIs(isMutant);
+    }
+
+
 }

@@ -2,46 +2,54 @@ package com.meli.mutant.finder.domain.usecase;
 
 import com.meli.mutant.finder.domain.model.person.Person;
 import com.meli.mutant.finder.domain.model.person.PersonRepository;
+import com.meli.mutant.finder.domain.usecase.model.Stat;
 import com.meli.mutant.finder.domain.usecase.util.MutantDetectionUtilities;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 public class MutantFinderUseCase {
+
     private final PersonRepository personRepository;
 
-    public boolean isMutant(Person person) {
+    public boolean isMutant(List<String> dnaChain) {
         int mutantDnaFound = 0;
-        if (!MutantDetectionUtilities.isDnaChainValid(person.getDnaChain())) {
+        if (!MutantDetectionUtilities.isDnaChainValid(dnaChain)) {
             // Throw exception
         }
-        mutantDnaFound += MutantDetectionUtilities.horizontalVerification(person.getDnaChain());
+        mutantDnaFound += MutantDetectionUtilities.horizontalVerification(dnaChain);
         if (mutantDnaFound > 1) {
-            person.setMutant(true);
-            personRepository.save(person);
+            savePerson(dnaChain, true);
             return true;
         }
-        mutantDnaFound += MutantDetectionUtilities.verticalVerification(person.getDnaChain(), mutantDnaFound);
+        mutantDnaFound += MutantDetectionUtilities.verticalVerification(dnaChain, mutantDnaFound);
         if (mutantDnaFound > 1) {
-            person.setMutant(true);
-            personRepository.save(person);
+            savePerson(dnaChain, true);
             return true;
         }
-        mutantDnaFound += (person.getDnaChain().size() > 4) ?
-                MutantDetectionUtilities.checkLeftToRightDiagonals(person.getDnaChain(), mutantDnaFound) :
-                MutantDetectionUtilities.checkPrincipalDiagonals(person.getDnaChain(), mutantDnaFound);
+        mutantDnaFound += MutantDetectionUtilities.diagonalVerification(dnaChain, mutantDnaFound);
         if (mutantDnaFound > 1) {
-            person.setMutant(true);
-            personRepository.save(person);
+            savePerson(dnaChain, true);
             return true;
         }
-        mutantDnaFound += MutantDetectionUtilities.checkLeftToRightDiagonals(person.getDnaChain(), mutantDnaFound);
-        if (mutantDnaFound > 1) {
-            person.setMutant(true);
-            personRepository.save(person);
-            return true;
-        }
-        personRepository.save(person);
+        savePerson(dnaChain, false);
         return false;
     }
 
+    private Person savePerson(List<String> dnaChain, boolean isMutant) {
+        return personRepository.save(
+                Person.builder().dna(dnaChain).mutant(isMutant).build()
+        );
+    }
+
+    public Stat getStats() {
+        int mutants = Math.toIntExact(personRepository.countPeopleByIsMutant(true));
+        int humans = Math.toIntExact(personRepository.countPeopleByIsMutant(false));
+        return Stat.builder()
+                .mutants(mutants)
+                .humans(humans)
+                .ratio(humans > 0 ? (double) mutants/humans : mutants)
+                .build();
+    }
 }

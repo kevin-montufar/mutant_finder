@@ -34,5 +34,5 @@ Then you must run with "gradle bootRun" command.
   - response status: HTTP status 200-OK if is mutant, and 400-FORBIDDEN if is human.
 - Method GET "/stats"
   - response status: HTTP status 200-OK
-  - response body: {“count_mutant_dna”:40, “count_human_dna”:100: “ratio”:0.4}
+  - response body: {“count_mutant_dna”:40, “count_human_dna”:100, “ratio”:0.4}
 
